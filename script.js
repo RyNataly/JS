@@ -8,3 +8,4 @@ const adaptive = true;
 alert("Привет, это мое первое задание");
 console.log("А тут все видно!");
 console.log("очень все видно!");
+console.log("fuf все видно!");
