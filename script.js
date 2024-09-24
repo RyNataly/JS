@@ -54,3 +54,33 @@ console.log("Процент отката посреднику за работу 
 
 let servicePercentPrice = fullPrice - percent;
 console.log("Итоговая стоимость за вычетом отката посреднику " + servicePercentPrice);
+
+//Если fullPrice больше 30000, то “Даем скидку в 10%” 
+if (fullPrice >= 30000) console.log("Даем скидку в 10%");
+
+//Если fullPrice больше 15000 и меньше 30000, то сообщение “Даем скидку в 5%” 
+if (fullPrice >= 15000 && fullPrice < 30000) console.log("Даем скидку в 5%");
+
+//Если fullPrice меньше 15000 и больше 0 то в консоль вывести сообщение “Скидка не предусмотрена” 
+if (fullPrice > 0 && fullPrice < 15000) console.log("Скидка не предусмотрена");
+
+//Если отрицательное значение то вывести “Что то пошло не так” 
+if (fullPrice <= 0) console.log("Что то пошло не так");
+
+//Учесть варианты 0, 15000 и 30000(к какому уровню не важно)
+
+//Другой вариант
+switch (true) {
+  case fullPrice >= 30000: 
+    console.log("Даем скидку в 10%");
+    break
+  case fullPrice >= 15000 && fullPrice < 30000:
+    console.log("Даем скидку в 5%");
+    break
+  case fullPrice > 0 && fullPrice < 15000:
+    console.log("Скидка не предусмотрена");
+    break
+  case fullPrice <= 0:
+    console.log("Что то пошло не так");
+}
+
