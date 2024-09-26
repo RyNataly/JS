@@ -38,7 +38,8 @@ function getFullPrice (price1, price2) {
 }
 
 const getTitle = function (title) { 
-  return title = title[0].toUpperCase() + title.slice(1).toLowerCase();
+  title = title.trim();
+  return title[0].toUpperCase() + title.slice(1).toLowerCase();
 }
 
 // итоговая стоимость за вычетом процента отката
@@ -49,7 +50,6 @@ const getServicePercentPrices = function (price, rollback) {
 allServicePrices = getAllServicePrices(servicePrice1, servicePrice2); 
 fullPrice = getFullPrice (screenPrice, allServicePrices);
 servicePercentPrice = getServicePercentPrices(fullPrice, rollback);
-title = getTitle(title);
 
 showTypeOf(title);
 showTypeOf(fullPrice);
