@@ -1,5 +1,25 @@
 'use strict';
 
+let title = document.getElementsByTagName('h1').title
+let buttonCalculate = document.getElementsByClassName('handler_btn')[0]
+let buttonCancel = document.getElementsByClassName('handler_btn')[1]
+let buttonPlus = document.querySelector('.screen-btn')
+let classPercent = document.querySelectorAll('.other-items.percent')
+let classNumber = document.querySelectorAll('.other-items.number')
+let inputType = document.querySelector('.rollback input[type = range]')  
+let clSpan = document.querySelector('.rollback  span.range-value')  
+
+let inputTotal = document.getElementsByClassName('total-input') //полцчить элементы почему то не вышло...
+console.log(inputTotal)
+for (let elem of inputTotal) {
+   console.log(elem)
+};
+
+let classScreen = document.querySelectorAll('.screen')
+console.log(classScreen)
+
+
+
 const appData = {
     title: '', 
     screens: [],
@@ -114,15 +134,8 @@ const appData = {
       console.log(appData.screens);
       console.log(appData.services);
 
-      // console.log(appData.getRollbackMessage());
-      // console.log(appData.allServicePrices);
-      // console.log(appData.title);
-
-      // for (const key in appData) {
-      //     console.log(appData[key]);; 
-      // }
     }
 } 
 
-appData.start();
+// appData.start();
 
