@@ -9,11 +9,15 @@ let classNumber = document.querySelectorAll('.other-items.number')
 let inputType = document.querySelector('.rollback input[type = range]')  
 let clSpan = document.querySelector('.rollback  span.range-value')  
 
-let inputTotal = document.getElementsByClassName('total-input') //полцчить элементы почему то не вышло...
-console.log(inputTotal)
-for (let elem of inputTotal) {
-   console.log(elem)
-};
+let inputTotal = document.getElementsByClassName('total-input')[0] 
+let inputTotal1 = document.getElementsByClassName('total-input')[1]
+let inputTotal2 = document.getElementsByClassName('total-input')[2]
+let inputTotal3 = document.getElementsByClassName('total-input')[3]
+let inputTotal4 = document.getElementsByClassName('total-input')[4]
+
+// for (let elem of inputTotal) {
+//    console.log(elem)
+// };
 
 let classScreen = document.querySelectorAll('.screen')
 console.log(classScreen)
