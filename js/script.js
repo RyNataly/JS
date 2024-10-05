@@ -143,6 +143,10 @@ const appData = {
     viewRange: function () {
         // console.log(inputRangeValue)
         inputRangeValue.textContent = inputRange.value + '%'
+        if (fullTotalCount.value != '') {
+            appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (+inputRange.value/100));
+            appData.showResult()
+        }
     },
 
     logger: function(){
