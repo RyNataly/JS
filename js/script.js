@@ -44,34 +44,26 @@ const appData = {
         document.title = title.textContent
     },
     start: function(){
-      
-      // if (flag) {
-            appData.empty()
-            appData.addScreens()
+          appData.addScreens()
+          if (appData.empty()) {
             appData.addServices()
             appData.addPrices();
             appData.showResult()
-            appData.empty()
-        //  }else{
-        //    alert ("Вы не выбрали тип экрана!")
-        //  }
-        //  console.log("!" + appData.empty())
-        // appData.getServicePercentPrices();
-
-        // appData.logger();
+         }else{
+           alert ("Вы не выбрали тип экрана или не указали их количество!")
+         }
     },
     empty: function() {
         console.log(appData.screens)
         for (let screen of appData.screens) {
             console.log(screen.name)
-            // if (screen.name == "Тип экранов") {
-            //   console.log(true) 
-            //   return true
-            // } else {
-            //   console.log(false)
-            //   return false;
-            // }
-          }
+            if (screen.name == "Тип экранов" || screen.price == "")  {
+              console.log(false) 
+              return false
+            } else {
+              console.log(true)
+            }
+          }return true
     },
     showResult: function() {
         total.value = appData.screenPrice
