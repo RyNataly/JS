@@ -38,14 +38,13 @@ const appData = {
         buttonCalculate.addEventListener('click', appData.start)
         buttonPlus.addEventListener('click', appData.addScreenBlock)
         inputRange.addEventListener('change', appData.viewRange)
-        // appData.start()
     },
     addTitle: function(){
         document.title = title.textContent
     },
     start: function(){
-          appData.addScreens()
-          if (appData.empty()) {
+          if (!appData.CheckError()) {
+            appData.addScreens()
             appData.addServices()
             appData.addPrices();
             appData.showResult()
@@ -53,21 +52,24 @@ const appData = {
            alert ("Вы не выбрали тип экрана или не указали их количество!")
          }
     },
-    empty: function() {
+    CheckError: function() {
+        screens = document.querySelectorAll('.screen')
         console.log(appData.screens)
-        for (let screen of appData.screens) {
-            console.log(screen.name)
-            if (screen.name == "Тип экранов" || screen.price == "")  {
-              console.log(false) 
-              return false
+        // for (let screen of appData.screens) {  ПОЧЕМУ при таком цмкле была ошибка, что screen.querySelector - это не функция, а с ForEach работает? Вроде суть циклов одна...
+        screens.forEach( function (screen) {
+            const select = screen.querySelector('select');
+            const input = screen.querySelector('input');
+            if (select.value === '' || input.value === '')  {
+              appData.isError = true
             } else {
-              console.log(true)
+              appData.isError = false
             }
-          }return true
+        } ) 
+        return appData.isError
     },
     showResult: function() {
         total.value = appData.screenPrice
-        totalCountOther.value = appData.servicePricesPercent = appData.servicePricesNumber
+        totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber
         fullTotalCount.value = appData.fullPrice
         totalCountRollback.value = appData.servicePercentPrice 
         totalCount.value = appData.count;
@@ -85,7 +87,7 @@ const appData = {
               name: selectName, 
               price: +select.value * +input.value
             });
-            //count++
+            appData.count += +input.value
         })
     },
     addServices: function(){
@@ -120,7 +122,7 @@ const appData = {
    addPrices: function () { 
         for (let screen of appData.screens) {
           appData.screenPrice += +screen.price
-          appData.count++
+          // appData.count ++
         }
         // сумма всех дополнительных услуг
         for (let key in appData.servicesNumber) {
@@ -132,20 +134,21 @@ const appData = {
 
         appData.fullPrice = appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
 
-        appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (+inputRange.value/100));
+        appData.servicePercentPrice = appData.fullPrice - Math.round(appData.fullPrice * (+inputRange.value/100));
    },
 
     // итоговая стоимость за вычетом процента отката
-    getServicePercentPrices: function () { 
-      appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback/100));  
-    },
+    // getServicePercentPrices: function () { 
+    //   appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback/100));  
+    // },
 
     viewRange: function () {
         // console.log(inputRangeValue)
         inputRangeValue.textContent = inputRange.value + '%'
         if (fullTotalCount.value != '') {
-            appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (+inputRange.value/100));
+            appData.servicePercentPrice = appData.fullPrice - Math.round(appData.fullPrice * (+inputRange.value/100));
             appData.showResult()
+            console.log(appData.fullPrice + "! " + Math.round(appData.fullPrice * (+inputRange.value/100)))
         }
     },
 
