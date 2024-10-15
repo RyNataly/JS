@@ -34,108 +34,124 @@ const appData = {
     servicesPercent: {},
     servicesNumber: {},
     init: function(){
-        appData.addTitle()
+        this.addTitle()
         buttonCalculate.addEventListener('click', appData.start)
-        buttonPlus.addEventListener('click', appData.addScreenBlock)
+        buttonPlus.addEventListener('click', this.addScreenBlock)
         inputRange.addEventListener('change', appData.viewRange)
+        buttonCancel.addEventListener('click', appData.reset)
     },
     addTitle: function(){
         document.title = title.textContent
     },
     start: function(){
-          if (!appData.CheckError()) {
+          if (!appData.checkError()) {
             appData.addScreens()
             appData.addServices()
             appData.addPrices();
             appData.showResult()
+            appData.stop();
          }else{
            alert ("Вы не выбрали тип экрана или не указали их количество!")
          }
+ 
     },
-    CheckError: function() {
+    stop: function() {
         screens = document.querySelectorAll('.screen')
-        console.log(appData.screens)
+        //console.log(this.screens)
+        screens.forEach( (screen) => {
+            const select = screen.querySelector('select');
+            const input = screen.querySelector('input[type=text]');
+            select.setAttribute("disabled", "");
+            input.setAttribute("disabled", "");
+        } ) 
+        buttonCalculate.setAttribute('style', 'display: none;')
+        buttonCancel.style.removeProperty('display')
+
+    },
+    checkError: function() {
+        screens = document.querySelectorAll('.screen')
+        console.log(this.screens)
         // for (let screen of appData.screens) {  ПОЧЕМУ при таком цмкле была ошибка, что screen.querySelector - это не функция, а с ForEach работает? Вроде суть циклов одна...
-        screens.forEach( function (screen) {
+        screens.forEach( (screen) => {
             const select = screen.querySelector('select');
             const input = screen.querySelector('input');
             if (select.value === '' || input.value === '')  {
-              appData.isError = true
+              this.isError = true
             } else {
-              appData.isError = false
+              this.isError = false
             }
         } ) 
-        return appData.isError
+        return this.isError
     },
+
     showResult: function() {
-        total.value = appData.screenPrice
-        totalCountOther.value = appData.servicePricesPercent + appData.servicePricesNumber
-        fullTotalCount.value = appData.fullPrice
-        totalCountRollback.value = appData.servicePercentPrice 
-        totalCount.value = appData.count;
+        total.value = this.screenPrice
+        totalCountOther.value = this.servicePricesPercent + this.servicePricesNumber
+        fullTotalCount.value = this.fullPrice
+        totalCountRollback.value = this.servicePercentPrice 
+        totalCount.value = this.count;
     },
     addScreens: function(){
         screens = document.querySelectorAll('.screen') //переопределили, чтобы не потерять все значения, обновляем список после каждого добавленного
 
-        screens.forEach(function(screen, index){
+        screens.forEach((screen, index) => {
             const select = screen.querySelector('select')
             const input = screen.querySelector('input')
             const selectName = select.options[select.selectedIndex].textContent
             
-            appData.screens.push({
+            this.screens.push({
               id: index, 
               name: selectName, 
               price: +select.value * +input.value
             });
-            appData.count += +input.value
+            this.count += +input.value
         })
     },
     addServices: function(){
-        otherItemsPercent.forEach(function (item) {
+        otherItemsPercent.forEach((item) => {
             const check = item.querySelector('input[type=checkbox]')
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
 
             if (check.checked){
-                appData.servicesPercent[label.textContent] = +input.value
+                this.servicesPercent[label.textContent] = +input.value
             } 
         })
-        otherItemsNumber.forEach(function (item) {
+        otherItemsNumber.forEach((item) => {
             const check = item.querySelector('input[type=checkbox]')
             const label = item.querySelector('label')
             const input = item.querySelector('input[type=text]')
 
             if (check.checked){
-                appData.servicesNumber[label.textContent] = +input.value
+                this.servicesNumber[label.textContent] = +input.value
             } 
         })
 
-        console.log(appData)
+        console.log(this)
     },
     addScreenBlock: function() {
         const cloneScreen = screens[0].cloneNode(true)
-
         screens[screens.length - 1].after(cloneScreen)
     },
 
   // Расчет услуг и экранов
-   addPrices: function () { 
-        for (let screen of appData.screens) {
-          appData.screenPrice += +screen.price
+    addPrices: function () { 
+        for (let screen of this.screens) {
+          this.screenPrice += +screen.price
           // appData.count ++
         }
         // сумма всех дополнительных услуг
-        for (let key in appData.servicesNumber) {
-          appData.servicePricesNumber += appData.servicesNumber[key] 
+        for (let key in this.servicesNumber) {
+          this.servicePricesNumber += this.servicesNumber[key] 
         } 
-        for (let key in appData.servicesPercent) {
-          appData.servicePricesPercent += appData.screenPrice * (appData.servicesPercent[key]/100)
+        for (let key in this.servicesPercent) {
+          this.servicePricesPercent += this.screenPrice * (this.servicesPercent[key]/100)
         } 
 
-        appData.fullPrice = appData.screenPrice + appData.servicePricesNumber + appData.servicePricesPercent;
+        this.fullPrice = this.screenPrice + this.servicePricesNumber + this.servicePricesPercent;
 
-        appData.servicePercentPrice = appData.fullPrice - Math.round(appData.fullPrice * (+inputRange.value/100));
-   },
+        this.servicePercentPrice = this.fullPrice - Math.round(this.fullPrice * (+inputRange.value/100));
+    },
 
     // итоговая стоимость за вычетом процента отката
     // getServicePercentPrices: function () { 
@@ -146,17 +162,34 @@ const appData = {
         // console.log(inputRangeValue)
         inputRangeValue.textContent = inputRange.value + '%'
         if (fullTotalCount.value != '') {
-            appData.servicePercentPrice = appData.fullPrice - Math.round(appData.fullPrice * (+inputRange.value/100));
+            this.servicePercentPrice = this.fullPrice - Math.round(this.fullPrice * (+inputRange.value/100));
             appData.showResult()
-            console.log(appData.fullPrice + "! " + Math.round(appData.fullPrice * (+inputRange.value/100)))
+            console.log(this.fullPrice + "! " + Math.round(this.fullPrice * (+inputRange.value/100)))
         }
     },
+    reset: function(){
+        buttonCancel.setAttribute('style', 'display: none;')
+        buttonCalculate.style.removeProperty('display')
 
+        screens = document.querySelectorAll('.screen')
+        screens.forEach( (screen) => {
+            const select = screen.querySelector('select');
+            const input = screen.querySelector('input[type=text]');
+            select.removeAttribute("disabled");
+            input.removeAttribute("disabled");
+            select.value = "";
+            input.value = "";
+        } ) 
+ 
+        //this.screens.splice(1, 1);
+        this.screens.pop();   //не понимаю, почему не хочет работать. говорит не может прочитать свойство. Ошибка типов. Но Screens это же массив 
+        console.log(screens);
+    },
     logger: function(){
-      console.log(appData.fullPrice);
-      console.log(appData.servicePercentPrice);
-      console.log(appData.screens);
-      console.log(appData.services);
+      console.log(this.fullPrice);
+      console.log(this.servicePercentPrice);
+      console.log(this.screens);
+      console.log(this.services);
 
     }
 } 
