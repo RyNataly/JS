@@ -179,10 +179,11 @@ const appData = {
             input.removeAttribute("disabled");
             select.value = "";
             input.value = "";
+            if (screens[0] !== screen) screen.remove();
         } ) 
  
         //this.screens.splice(1, 1);
-        this.screens.pop();   //не понимаю, почему не хочет работать. говорит не может прочитать свойство. Ошибка типов. Но Screens это же массив 
+        //this.screens.pop();   //не понимаю, почему не хочет работать. говорит не может прочитать свойство. Ошибка типов. Но Screens это же массив 
         console.log(screens);
     },
     logger: function(){
