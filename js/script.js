@@ -35,21 +35,26 @@ const appData = {
     servicesNumber: {},
     init: function(){
         this.addTitle()
-        buttonCalculate.addEventListener('click', appData.start)
-        buttonPlus.addEventListener('click', this.addScreenBlock)
-        inputRange.addEventListener('change', appData.viewRange)
-        buttonCancel.addEventListener('click', appData.reset)
+        const start = this.start.bind(this);
+        //buttonCalculate.addEventListener('click', this.start)
+        buttonCalculate.addEventListener('click', start)
+        const addScreenBlock = this.addScreenBlock.bind(this);
+        buttonPlus.addEventListener('click', addScreenBlock)
+        const viewRange = this.viewRange.bind(this);
+        inputRange.addEventListener('change', viewRange)
+        const reset = this.reset.bind(this);
+        buttonCancel.addEventListener('click', reset)
     },
     addTitle: function(){
         document.title = title.textContent
     },
     start: function(){
-          if (!appData.checkError()) {
-            appData.addScreens()
-            appData.addServices()
-            appData.addPrices();
-            appData.showResult()
-            appData.stop();
+          if (!this.checkError()) {
+            this.addScreens()
+            this.addServices()
+            this.addPrices();
+            this.showResult()
+            this.stop();
          }else{
            alert ("Вы не выбрали тип экрана или не указали их количество!")
          }
@@ -139,6 +144,7 @@ const appData = {
         for (let screen of this.screens) {
           this.screenPrice += +screen.price
           // appData.count ++
+
         }
         // сумма всех дополнительных услуг
         for (let key in this.servicesNumber) {
@@ -153,18 +159,11 @@ const appData = {
         this.servicePercentPrice = this.fullPrice - Math.round(this.fullPrice * (+inputRange.value/100));
     },
 
-    // итоговая стоимость за вычетом процента отката
-    // getServicePercentPrices: function () { 
-    //   appData.servicePercentPrice = appData.fullPrice - (appData.fullPrice * (appData.rollback/100));  
-    // },
-
     viewRange: function () {
-        // console.log(inputRangeValue)
         inputRangeValue.textContent = inputRange.value + '%'
         if (fullTotalCount.value != '') {
             this.servicePercentPrice = this.fullPrice - Math.round(this.fullPrice * (+inputRange.value/100));
-            appData.showResult()
-            console.log(this.fullPrice + "! " + Math.round(this.fullPrice * (+inputRange.value/100)))
+            this.showResult()
         }
     },
     reset: function(){
@@ -184,7 +183,42 @@ const appData = {
  
         //this.screens.splice(1, 1);
         //this.screens.pop();   //не понимаю, почему не хочет работать. говорит не может прочитать свойство. Ошибка типов. Но Screens это же массив 
-        console.log(screens);
+        
+	    otherItemsPercent.forEach((item) => {
+            const check = item.querySelector('input[type=checkbox]')
+            const input = item.querySelector('input[type=text]')
+            check.checked = false
+            // input.value = ""
+        })
+        otherItemsNumber.forEach((item) => {
+            const check = item.querySelector('input[type=checkbox]')
+            const input = item.querySelector('input[type=text]')
+            check.checked = false
+        })
+        this.screens.forEach((screen) => {
+            this.screens.pop();
+        })
+        this.screens.pop();
+
+        console.log(this.screens)
+
+        inputRange.value = "0"
+        inputRange.step = "1"
+        inputRangeValue.textContent = '0%'
+        total.value = "" 
+        totalCountOther.value = ""
+        fullTotalCount.value = ""
+        totalCountRollback.value = ""
+        totalCount.value = "";
+        this.screenPrice = 0
+        this.servicePricesPercent = 0
+        this.servicePricesNumber = 0
+        this.fullPrice = 0
+        console.log(this.screenPrice)
+        this.servicePercentPrice = 0
+        this.count = 0
+
+	//console.log(screens);
     },
     logger: function(){
       console.log(this.fullPrice);
